@@ -1,17 +1,29 @@
 import express, { Express } from "express";
-import { get } from "http";
 import {
   getCreateUserPage,
   getHomePage,
-  postCreateUserPage,
+  postCreateUser,
+  postDeleteUser,
+  getViewUser,
+  postUpdateUser,
 } from "../controllers/user.controller";
+import {
+  getAdminUserPage,
+  getDashboardPage,
+} from "controllers/dashboard.controller";
 
 const router = express.Router();
 const webRoutes = (app: Express) => {
   //get users
   router.get("/", getHomePage);
   router.get("/create-user", getCreateUserPage);
-  router.post("/handle-create-user", postCreateUserPage);
+  router.post("/handle-create-user", postCreateUser);
+  router.post("/handle-delete-user/:id", postDeleteUser);
+  router.get("/handle-view-user/:id", getViewUser);
+  router.post("/handle-update-user", postUpdateUser);
+
+  router.get("/admin", getDashboardPage);
+  router.get("/admin/user", getAdminUserPage);
   app.use("/", router);
 };
 export default webRoutes;
