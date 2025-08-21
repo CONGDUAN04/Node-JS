@@ -26,7 +26,84 @@
     <div id="layoutSidenav">
       <%- include('../layout/sidenav'); -%>
       <div id="layoutSidenav_content">
-        <main>Manager User</main>
+        <main>
+          <div class="container-fluid px-4">
+            <h1 class="mt-4">Manage Users</h1>
+            <ol class="breadcrumb mb-4">
+              <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
+              <li class="breadcrumb-item active">Users</li>
+            </ol>
+            <div>
+              <div
+                style="
+                  display: flex;
+                  justify-content: space-between;
+                  align-items: center;
+                  margin-bottom: 10px;
+                "
+              >
+                <h3 style="margin: 0">List Users:</h3>
+                <a href="/admin/create-user" class="btn btn-warning"
+                  >Create a new user</a
+                >
+              </div>
+              <hr />
+            </div>
+            <div>
+              <table class="table table-hover table-striped table-bordered">
+                <thead class="bg-slate-100 text-slate-700 uppercase text-sm">
+                  <tr>
+                    <th class="py-3 px-4 text-left font-semibold tracking-wide">
+                      ID
+                    </th>
+                    <th class="py-3 px-4 text-left font-semibold tracking-wide">
+                      Name
+                    </th>
+                    <th class="py-3 px-4 text-left font-semibold tracking-wide">
+                      Email
+                    </th>
+                    <th class="py-3 px-4 text-left font-semibold tracking-wide">
+                      Address
+                    </th>
+                    <th class="py-3 px-4 text-left font-semibold tracking-wide">
+                      Action
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% users.forEach( function (user) { %>
+                  <tr>
+                    <td><%= user.id %></td>
+                    <td><%= user.fullName %></td>
+                    <td><%= user.username %></td>
+                    <td><%= user.address %></td>
+                    <td>
+                      <div style="display: flex; gap: 10px">
+                        <form
+                          action="/handle-view-user/<%= user.id %>"
+                          method="get"
+                        >
+                          <button tpye="submit" class="btn btn-warning">
+                            View
+                          </button>
+                        </form>
+                        <form
+                          action="/handle-delete-user/<%= user.id %>"
+                          method="post"
+                        >
+                          <button tpye="submit" class="btn btn-danger">
+                            Delete
+                          </button>
+                        </form>
+                      </div>
+                    </td>
+                  </tr>
+                  <% }) %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </main>
         <%- include('../layout/footer'); -%>
       </div>
     </div>
