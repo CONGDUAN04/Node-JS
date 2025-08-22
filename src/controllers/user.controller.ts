@@ -4,7 +4,7 @@ import {
   getAllUser,
   handleCreateUser,
   handleDeleteUser,
-  handleUpdateUser,
+  handleUpdateUser, // 👈 đây mới là hàm update service
   handleViewUser,
 } from "services/user.service";
 const getHomePage = async (req: Request, res: Response) => {
@@ -18,28 +18,35 @@ const getCreateUserPage = async (req: Request, res: Response) => {
 };
 
 const postCreateUser = async (req: Request, res: Response) => {
-  const { fullName, username, address, phone } = req.body;
+  const { fullName, username, address, phone, role } = req.body;
   const file = req.file;
   const avatar = file?.filename ?? null;
-  await handleCreateUser(fullName, username, address, phone, avatar);
+  await handleCreateUser(fullName, username, address, phone, avatar, role);
   return res.redirect("/admin/user");
 };
 const postDeleteUser = async (req: Request, res: Response) => {
   const { id } = req.params;
   await handleDeleteUser(id);
-  return res.redirect("/");
+  return res.redirect("/admin/user");
 };
 const getViewUser = async (req: Request, res: Response) => {
   const { id } = req.params;
+  const roles = await getAllRole();
   const user = await handleViewUser(id);
-  return res.render("view-user.ejs", { id: id, user: user });
+  return res.render("admin/user/detail.ejs", {
+    id: id,
+    user: user,
+    roles: roles,
+  });
 };
 const postUpdateUser = async (req: Request, res: Response) => {
-  const { id, fullName, email, address } = req.body;
-  //update user by id
-  const a = await handleUpdateUser(id, fullName, email, address);
-  return res.redirect("/");
+  const { id, fullName, address, phone, role } = req.body;
+  const file = req.file;
+  const avatar = file?.filename ?? undefined;
+  await handleUpdateUser(id, fullName, address, phone, avatar, role);
+  return res.redirect("/admin/user");
 };
+
 export {
   getHomePage,
   getCreateUserPage,

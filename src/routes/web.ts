@@ -20,10 +20,8 @@ const upload = multer({ dest: "uploads/" });
 const router = express.Router();
 const webRoutes = (app: Express) => {
   //get users
+  router.get("/admin", getDashboardPage);
   router.get("/", getHomePage);
-  router.post("/handle-delete-user/:id", postDeleteUser);
-  router.get("/handle-view-user/:id", getViewUser);
-  router.post("/handle-update-user", postUpdateUser);
 
   router.get("/admin", getDashboardPage);
   router.get("/admin/user", getAdminUserPage);
@@ -33,6 +31,14 @@ const webRoutes = (app: Express) => {
     fileUploadMiddleware("avatar"),
     postCreateUser
   );
+  router.post("/admin/delete-user/:id", postDeleteUser);
+  router.get("/admin/view-user/:id", getViewUser);
+  router.post(
+    "/admin/update-user",
+    fileUploadMiddleware("avatar"),
+    postUpdateUser
+  );
+
   router.get("/admin/product", getAdminProductPage);
   router.get("/admin/order", getAdminOrderPage);
   app.use("/", router);

@@ -10,18 +10,20 @@ const handleCreateUser = async (
   email: string,
   address: string,
   phone: string,
-  avatar: string
+  avatar: string | null, // ✅ thêm tham số avatar
+  role: string
 ) => {
   const defaultPassword = await hashPassword("123456");
   const user = await prisma.user.create({
     data: {
-      fullName: fullName,
+      fullName,
       username: email,
-      address: address,
+      address,
       password: defaultPassword,
       accountType: ACCOUNT_TYPE.SYSTEM,
-      phone: phone,
-      avatar: avatar,
+      phone,
+      avatar, // ✅ giờ có tham số để dùng
+      roleId: +role,
     },
   });
   return user;
@@ -47,17 +49,19 @@ const handleViewUser = async (id: string) => {
 const handleUpdateUser = async (
   id: string,
   fullName: string,
-  email: string,
-  address: string
+  address: string,
+  phone: string,
+  avatar: string,
+  role: string
 ) => {
   const updatedUser = await prisma.user.update({
     where: { id: +id },
     data: {
       fullName: fullName,
-      username: email,
       address: address,
-      password: "",
-      accountType: "",
+      phone: phone,
+      ...(avatar !== undefined && { avatar: avatar }),
+      roleId: +role,
     },
   });
   return updatedUser;
